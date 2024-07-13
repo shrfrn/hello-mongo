@@ -7,8 +7,26 @@ const url = 'mongodb://localhost:27017'
 // Database Name
 const dbName = 'tester_db'
 
-helloMongo()
 // tryMongo()
+// helloMongo()
+
+async function tryMongo() {
+
+    console.log('Connecting')
+    const connection = await MongoClient.connect(url)
+    
+    console.log('Connected. Getting DB')
+    const db = connection.db(dbName)
+
+    console.log('Getting Collection')
+    const collection = db.collection('customer')
+
+    console.log('Fetching Docs.')
+    const docs = await collection.find({ balance: { $gte: 10 } }).limit(3).toArray()    
+
+    console.log(`Docs:\n`, docs)
+    connection.close()
+}
 
 async function helloMongo() {
 
@@ -29,20 +47,4 @@ async function helloMongo() {
 
     // const { deletedCount } = await customerService.remove('6644ec4d1f6e9d64689bfe4a')
     // console.log('Customer Removed?', deletedCount)
-}
-
-async function tryMongo() {
-
-    console.log('Connecting')
-    const connection = await MongoClient.connect(url)
-    
-    console.log('Connected. Getting DB')
-    const db = connection.db(dbName)
-
-    console.log('Getting Collection')
-    const collection = db.collection('customer')
-
-    console.log('Fetching Docs.')
-    const docs = await collection.find({ balance: { $gte: 10 } }).limit(3).toArray()    // connection.close()
-    console.log(`Docs:\n`, docs)
 }
